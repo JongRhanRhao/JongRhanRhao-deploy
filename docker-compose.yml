@@ -4,7 +4,7 @@ services:
     image: postgres:16-alpine
     container_name: jongrhanrhao-db
     ports:
-      - ${POSTGRES_PORT}:5432
+      - 5432:${POSTGRES_PORT}
     volumes:
       - jongrhanrhao-data:/var/lib/postgresql/data
     environment:
@@ -14,32 +14,33 @@ services:
     networks:
       - jongrhanrhao-net
   backend:
-    depends_on:
-      - postgres
-    image: tonnatthapon/jongrhanrhao-backend:latest
     container_name: jongrhanrhao-backend
+    build: ../JongRhanRhao-backend/.
     ports:
-      - ${PORT}:3000
-    networks:
-      - jongrhanrhao-net
+      - ${SERVER_PORT}:3000
     environment:
+      - NODE_ENV=${NODE_ENV}
       - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_PORT=${POSTGRES_PORT}
       - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_PORT=${POSTGRES_PORT}
       - POSTGRES_APP_USER=${POSTGRES_APP_USER}
       - POSTGRES_APP_PASSWORD=${POSTGRES_APP_PASSWORD}
       - CLIENT_URL=${CLIENT_URL}
+      - SERVER_URL=${SERVER_URL}
+      - SERVER_PORT=${SERVER_PORT}
       - JWT_SECRET=${JWT_SECRET}
       - SESSION_SECRET=${SESSION_SECRET}
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
       - FACEBOOK_CLIENT_ID=${FACEBOOK_CLIENT_ID}
       - FACEBOOK_CLIENT_SECRET=${FACEBOOK_CLIENT_SECRET}
-  frontend:
     depends_on:
-      - backend
-    image: tonnatthapon/jongrhanrhao-frontend:latest
+      - postgres
+    networks:
+      - jongrhanrhao-net
+  frontend:
     container_name: jongrhanrhao-frontend
+    build: ../JongRhanRhao-frontend/.
     ports:
       - ${NGINX_PORT}:5173
     networks:
@@ -47,7 +48,9 @@ services:
     environment:
       - NGINX_PROXY=${NGINX_PROXY}
       - NGINX_PORT=${NGINX_PORT}
-volumes:
-  JongRhanRhao-data:
+    depends_on:
+      - backend
 networks:
-  JongRhanRhao-net:
+  jongrhanrhao-net:
+volumes:
+  jongrhanrhao-data:
