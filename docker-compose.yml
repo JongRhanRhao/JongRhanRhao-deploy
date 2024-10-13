@@ -4,7 +4,7 @@ services:
     image: postgres:16-alpine
     container_name: jongrhanrhao-db
     ports:
-      - 5000:${POSTGRES_PORT}
+      - 5432:${POSTGRES_PORT}
     volumes:
       - jongrhanrhao-data:/var/lib/postgresql/data
     environment:
@@ -18,7 +18,7 @@ services:
     # build: ../JongRhanRhao-backend/.
     image: tonnatthapon/jongrhanrhao-backend:latest
     ports:
-      - ${SERVER_PORT}:4000
+      - ${SERVER_PORT}:4444
     environment:
       - NODE_ENV=${NODE_ENV}
       - POSTGRES_DB=${POSTGRES_DB}
@@ -44,7 +44,7 @@ services:
     # build: ../JongRhanRhao-frontend/.
     image: tonnatthapon/jongrhanrhao-frontend:latest
     ports:
-      - ${NGINX_PORT}:6000
+      - ${NGINX_PORT}:5555
     networks:
       - jongrhanrhao-net
     environment:
