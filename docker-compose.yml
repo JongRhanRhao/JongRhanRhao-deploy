@@ -15,8 +15,8 @@ services:
       - jongrhanrhao-net
   backend:
     container_name: jongrhanrhao-backend
-    # build: ../JongRhanRhao-backend/.
-    image: tonnatthapon/jongrhanrhao-backend:latest
+    build: ../JongRhanRhao-backend/.
+    # image: tonnatthapon/jongrhanrhao-backend:latest
     ports:
       - ${SERVER_PORT}:4444
     environment:
@@ -41,8 +41,8 @@ services:
       - jongrhanrhao-net
   frontend:
     container_name: jongrhanrhao-frontend
-    # build: ../JongRhanRhao-frontend/.
-    image: tonnatthapon/jongrhanrhao-frontend:latest
+    build: ../JongRhanRhao-frontend/.
+    # image: tonnatthapon/jongrhanrhao-frontend:latest
     ports:
       - ${NGINX_PORT}:5555
     networks:
